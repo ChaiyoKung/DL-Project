@@ -1,7 +1,3 @@
-#include <Servo.h>
-#include <SoftwareSerial.h>
-#include <ArduinoJson.h>
-
 /********************
       การต่อวงจร
   +++ RGB Color sensor +++
@@ -29,6 +25,10 @@
   สายเทา -> 11
 ********************/
 
+#include <Servo.h>
+#include <SoftwareSerial.h>
+#include <ArduinoJson.h>
+
 // เชื่อมกับ NodeMCU
 SoftwareSerial s(10, 11);
 
@@ -44,7 +44,7 @@ int rgb[3] = {0, 0, 0};
 // Servo motor
 Servo servo;
 #define svOut 3
-int defaultServoDeg = 80;
+int defaultServoDeg = 75;
 int nowServoDeg = defaultServoDeg;
 
 // IR Sensor
@@ -125,12 +125,12 @@ bool bottleIsAlpha() {
   int r = rgb[0];
   int g = rgb[1];
   int b = rgb[2];
-  int alpha = 50;
-  if (r < alpha && g < alpha && b < alpha) {
+  int alpha = 80;
+  int alpha2 = 0;
+  if (r < alpha2 && g < alpha2 && b < alpha2) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 void servoWriteSlow(int deg, int dely) {
@@ -171,6 +171,7 @@ void loop() {
         root["isColor"] = true;
         servoWriteSlow(150, 10);
       }
+      root.printTo(s);
     }
   } else {
     digitalWrite(ledGreen, LOW);
@@ -179,7 +180,5 @@ void loop() {
     first = true;
     servoWriteSlow(defaultServoDeg, 10);
   }
-
-  root.printTo(s);
   delay(500);
 }

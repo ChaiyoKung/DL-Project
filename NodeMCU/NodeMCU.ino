@@ -1,3 +1,14 @@
+/********************
+      การต่อวงจร
+  +++ Green LED +++
+  ขายาว -> D0
+  ขาสั้น -> GND
+
+  +++ เชื่อมกับ Arduino +++
+  สายขาว -> D2
+  สายเทา -> D3
+********************/
+
 #include <ESP8266WiFi.h>
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
@@ -48,28 +59,22 @@ void loop() {
   }
 
   // ถ้ามีข้อมูลส่งมา
-  root.prettyPrintTo(Serial);
-  Serial.println();
   String rgb = root["rgb"];
   bool isColor = root["isColor"];
-  Serial.println("---------------------------------");
 
-  // set string value
+  // Push id to /records/
   String id = Firebase.push("records", "");
-  Firebase.setString("records/" + id + "/rgb", rgb);
-  // handle error
-  if (Firebase.failed()) {
-    Serial.print("setting /rgb failed:");
-    Serial.println(Firebase.error());
-    return;
-  }
-
-  // set bool value
-  Firebase.setBool("records/" + id + "/isColor", isColor);
-  // handle error
-  if (Firebase.failed()) {
-    Serial.print("setting /isColor failed:");
-    Serial.println(Firebase.error());
-    return;
+  if (Firebase.success()) {
+    // Set string value to /records/{id}/
+    Firebase.setString("records/" + id + "/rgb", rgb);
+    if (Firebase.success()) {
+      // Set bool value to /records/{id}/
+      Firebase.setBool("records/" + id + "/isColor", isColor);
+      if (Firebase.success()) {
+        root.prettyPrintTo(Serial);
+        Serial.println();
+        Serial.println("---------------------------------");
+      }
+    }
   }
 }
