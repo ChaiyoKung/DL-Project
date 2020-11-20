@@ -34,15 +34,18 @@ void setup() {
 
   // Connect to wifi.
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("connecting");
-  while (WiFi.status() != WL_CONNECTED) {
-    digitalWrite(ledConnStatus, HIGH);
-    Serial.print(".");
-    delay(500);
+  Serial.print("Connecting");
+  while (WiFi.status() != WL_CONNECTED)
+  {
     digitalWrite(ledConnStatus, LOW);
+    delay(250);
+    Serial.print(".");
+    digitalWrite(ledConnStatus, HIGH);
+    delay(250);
   }
   Serial.println();
-  Serial.print("connected: ");
+
+  Serial.print("Connected, IP address: ");
   Serial.println(WiFi.localIP());
   digitalWrite(ledConnStatus, HIGH);
 
@@ -50,7 +53,15 @@ void setup() {
 }
 
 void loop() {
-  //  Serial.println(now());
+  if (WiFi.status() != WL_CONNECTED) {
+    digitalWrite(ledConnStatus, LOW);
+    delay(250);
+    Serial.print(".");
+    digitalWrite(ledConnStatus, HIGH);
+    delay(250);
+    return;
+  }
+  
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(s);
 
