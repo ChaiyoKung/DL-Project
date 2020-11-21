@@ -75,9 +75,11 @@ void loop() {
   // Push id to /records/
   String id = Firebase.push("records", "");
   if (Firebase.success()) {
+    delay(500);
     // Set string value to /records/{id}/
     Firebase.setString("records/" + id + "/dateTime", dateTime);
     if (Firebase.success()) {
+      delay(500);
       // Set bool value to /records/{id}/
       Firebase.setBool("records/" + id + "/isColor", isColor);
       if (Firebase.success()) {

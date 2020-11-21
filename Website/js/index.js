@@ -14,8 +14,9 @@ function appendTableHistoryRow(dateTime, isColor) {
   tdDateTime.innerHTML = dateTime;
   let tdBottleType = document.createElement("td");
   let bottleImage = document.createElement("img");
+  bottleImage.setAttribute("width", "30");
   bottleImage.setAttribute("height", "30");
-  bottleImage.classList.add("bottle-icon")
+  bottleImage.classList.add("bottle-icon");
   let bottleType;
   if (isColor) {
     bottleType = "สี";
@@ -31,11 +32,16 @@ function appendTableHistoryRow(dateTime, isColor) {
   bottleHistoryTableBody.prepend(tr);
 }
 
+function clearTableHistoryRow() {
+  bottleHistoryTableBody.html(null);
+}
+
 function main() {
   firebaseDB.ref("records").on("value", (snapshot) => {
     let values = snapshot.val();
     let countTrans = 0;
     let countColor = 0;
+    clearTableHistoryRow();
     for (const key in values) {
       if (values.hasOwnProperty(key)) {
         const bottle = values[key];
@@ -49,6 +55,7 @@ function main() {
         appendTableHistoryRow(bottleDateTime, bottleIsColor);
       }
     }
+    console.log(countTrans, countColor);
     changeBottleCount(countTrans, countColor);
   });
 }
