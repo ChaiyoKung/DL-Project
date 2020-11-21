@@ -28,6 +28,7 @@
 #include <Servo.h>
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
+#include <TimeLib.h>
 
 // เชื่อมกับ NodeMCU
 SoftwareSerial s(10, 11);
@@ -58,6 +59,7 @@ int irVal;
 bool first = true;
 
 void setup() {
+  setTime(19,14,0,21,11,2020);
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
   pinMode(S2, OUTPUT);
@@ -72,7 +74,6 @@ void setup() {
   servo.write(defaultServoDeg);
 
   pinMode(irIn, INPUT);
-
 
   pinMode(ledGreen, OUTPUT);
   // pinMode(ledRed, OUTPUT);
@@ -149,6 +150,11 @@ void servoWriteSlow(int deg, int dely) {
   }
 }
 
+String nowDateTime() {
+  String dateTime = String(day()) + "/" + String(month()) + "/" + String(year()) + " " + String(hour()) + ":" + String(minute()) + ":" + String(second());
+  return dateTime;
+}
+
 void loop() {
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
@@ -162,8 +168,7 @@ void loop() {
       delay(2000);
       first = false; // ให้อ่านค่าแค่รอบเดียว
       runColorSensor();
-      String rgbCode = "rgb(" + String(rgb[0]) + ", " + String(rgb[1]) + ", " + String(rgb[2]) + ")";
-      root["rgb"] = rgbCode;
+      root["dateTime"] = nowDateTime();
       if (bottleIsAlpha()) {
         root["isColor"] = false;
         servoWriteSlow(10, 10);

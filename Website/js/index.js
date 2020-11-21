@@ -14,12 +14,19 @@ function appendTableHistoryRow(dateTime, isColor) {
   tdDateTime.innerHTML = dateTime;
   let tdBottleType = document.createElement("td");
   let bottleImage = document.createElement("img");
-  // *********************** ใส่รูป
-  bottleImage.setAttribute("src", "/img/plastic-bottle-trans.svg");
-  bottleImage.setAttribute("alt", "plastic bottle trans");
-  tdBottleType.append(bottleImage);
-  let bottleType = "สี";
-  tdBottleType.innerHTML = bottleType;
+  bottleImage.setAttribute("height", "30");
+  bottleImage.classList.add("bottle-icon")
+  let bottleType;
+  if (isColor) {
+    bottleType = "สี";
+    bottleImage.setAttribute("src", "/img/plastic-bottle-color.svg");
+    bottleImage.setAttribute("alt", "color plastic bottle");
+  } else {
+    bottleType = "ใส";
+    bottleImage.setAttribute("src", "/img/plastic-bottle-trans.svg");
+    bottleImage.setAttribute("alt", "transparent plastic bottle");
+  }
+  tdBottleType.append(bottleImage, bottleType);
   tr.append(tdDateTime, tdBottleType);
   bottleHistoryTableBody.prepend(tr);
 }

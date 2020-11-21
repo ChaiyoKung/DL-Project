@@ -13,7 +13,6 @@
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
 #include <FirebaseArduino.h>
-#include <TimeLib.h>
 
 SoftwareSerial s(D3, D2);
 
@@ -61,7 +60,7 @@ void loop() {
     delay(250);
     return;
   }
-  
+
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.parseObject(s);
 
@@ -70,14 +69,14 @@ void loop() {
   }
 
   // ถ้ามีข้อมูลส่งมา
-  String rgb = root["rgb"];
+  String dateTime = root["dateTime"];
   bool isColor = root["isColor"];
 
   // Push id to /records/
   String id = Firebase.push("records", "");
   if (Firebase.success()) {
     // Set string value to /records/{id}/
-    Firebase.setString("records/" + id + "/rgb", rgb);
+    Firebase.setString("records/" + id + "/dateTime", dateTime);
     if (Firebase.success()) {
       // Set bool value to /records/{id}/
       Firebase.setBool("records/" + id + "/isColor", isColor);
