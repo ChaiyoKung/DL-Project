@@ -54,7 +54,6 @@ int irVal;
 
 // Status light
 #define ledGreen 12
-// #define ledRed 11
 
 bool first = true;
 
@@ -103,17 +102,6 @@ void runColorSensor() {
   int b = pulseIn(sensorOut, LOW);
   rgb[2] = map(b, 17, 76, 255, 0);
   delay(100);
-
-  /*Serial.print("rgb(");
-    //  Serial.print(r);
-    Serial.print(rgb[0]);
-    Serial.print(", ");
-    //  Serial.print(g);
-    Serial.print(rgb[1]);
-    Serial.print(", ");
-    //  Serial.print(b);
-    Serial.print(rgb[2]);
-    Serial.print(")\n");*/
 }
 
 void clearRGBArray() {
